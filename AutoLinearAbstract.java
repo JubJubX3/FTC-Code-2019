@@ -129,7 +129,7 @@ public abstract class AutoLinearAbstract extends LinearOpMode {
         /* Target-Motor constructor: hardwareMap, motor name, motor direction,
                               encoder counts per output shaft revolution, gear ratio, wheel radius */
         scissorLift = new DeviceTargetMotor(hardwareMap,"scissor_lift",REVERSE,1680,13*24/16);
-
+        boxMover = new DeviceTargetMotor(hardwareMap, "box_mover", REVERSE, 1440);
         /* Color sensor constructor: hardwareMap, sensor name, sensor I2C address */
         // colorLeftJewel = new DeviceColorSensor(hardwareMap,"left_jewel_color",0x3c);
         //   colorRightJewel = new DeviceColorSensor(hardwareMap,"right_jewel_color",0x30);
@@ -232,15 +232,39 @@ public abstract class AutoLinearAbstract extends LinearOpMode {
         telemetry.addData("  Speed",driveTrain.rear. rightSpeed);
     }
 
-
-
     void motorTelemetryDegrees (DeviceTargetMotor motor) {
         telemetry.addLine();
         telemetry.addLine(motor.name);
         telemetry.addData(" Position in Degrees", "%.2f degrees ", motor.getDegrees());
         telemetry.addData(" Position in Counts", motor.targetMotor.getCurrentPosition());
     }
+        boolean Kill ( double autoTime) {
+            boolean eStop;
+            if(!opModeIsActive()) {
+
+                driveTrain.stop();
+                scissorLift.stop();
+
+                eStop = true;
+
+            }
+            else
+                eStop = false;
+
+            return eStop || autoTimer.seconds()>= autoTime;
 
 
 
-}
+        }
+
+
+
+
+
+
+
+    }
+
+
+
+

@@ -58,7 +58,8 @@ public class Auto_Red_Skystone_Side extends AutoLinearAbstract {
             telemetry.addLine("Wait - Moving straight to align with blocks");
             driveTrainTelemetry();
             telemetry.update();
-            if (Kill(28)) {
+            if (autoTimer.seconds() > 25) {
+                driveTrain.stop();
                 break;
             }
         }
@@ -68,7 +69,8 @@ public class Auto_Red_Skystone_Side extends AutoLinearAbstract {
             telemetry.addLine("Wait - Moving left to be by blocks");
             driveTrainTelemetry();
             telemetry.update();
-            if (Kill(28)) {
+            if (autoTimer.seconds() > 25) {
+                driveTrain.stop();
                 break;
             }
         }
@@ -83,7 +85,8 @@ public class Auto_Red_Skystone_Side extends AutoLinearAbstract {
             telemetry.addLine("Wait - Moving to the blocks");
             driveTrainTelemetry();
             telemetry.update();
-            if (Kill(28)) {
+            if (autoTimer.seconds() > 25) {
+                driveTrain.stop();
                 break;
             }
         }
@@ -93,7 +96,8 @@ public class Auto_Red_Skystone_Side extends AutoLinearAbstract {
             telemetry.addLine("Scissor Lift going down");
             motorTelemetryDegrees(scissorLift);
             telemetry.update();
-            if (Kill(28)) {
+            if (autoTimer.seconds() > 28) {
+                scissorLift.stop();
                 break;
             }
         }
@@ -103,7 +107,8 @@ public class Auto_Red_Skystone_Side extends AutoLinearAbstract {
             telemetry.addLine("Box mover going out");
             motorTelemetryDegrees(boxMover);
             telemetry.update();
-            if (Kill(28)) {
+            if (autoTimer.seconds() > 28) {
+                boxMover.stop();
                 break;
             }
         }
@@ -121,7 +126,8 @@ public class Auto_Red_Skystone_Side extends AutoLinearAbstract {
             telemetry.addLine("Wait - Moving backwards to get out of the way");
             driveTrainTelemetry();
             telemetry.update();
-            if (Kill(28)) {
+            if (autoTimer.seconds() > 25) {
+                driveTrain.stop();
                 break;
             }
         }
@@ -131,7 +137,8 @@ public class Auto_Red_Skystone_Side extends AutoLinearAbstract {
             telemetry.addLine("Wait - Strafing right to foundation");
             driveTrainTelemetry();
             telemetry.update();
-            if (Kill(28)) {
+            if (autoTimer.seconds() > 25) {
+                driveTrain.stop();
                 break;
             }
         }
@@ -141,7 +148,8 @@ public class Auto_Red_Skystone_Side extends AutoLinearAbstract {
             telemetry.addLine("Wait - Moving to foundation");
             driveTrainTelemetry();
             telemetry.update();
-            if (Kill(28)) {
+            if (autoTimer.seconds() > 25) {
+                driveTrain.stop();
                 break;
             }
         }

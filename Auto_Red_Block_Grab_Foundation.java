@@ -57,7 +57,8 @@ public class Auto_Red_Block_Grab_Foundation extends AutoLinearAbstract {
             telemetry.addLine("Wait - Strafing right to foundation");
             driveTrainTelemetry();
             telemetry.update();
-            if (Kill(28)) {
+            if (autoTimer.seconds() > 25) {
+                driveTrain.stop();
                 break;
             }
         }
@@ -68,7 +69,8 @@ public class Auto_Red_Block_Grab_Foundation extends AutoLinearAbstract {
             telemetry.addLine("Wait - Moving to park area");
             driveTrainTelemetry();
             telemetry.update();
-            if (Kill(28)) {
+            if (autoTimer.seconds() > 25) {
+                driveTrain.stop();
                 break;
             }
         }
@@ -82,7 +84,8 @@ public class Auto_Red_Block_Grab_Foundation extends AutoLinearAbstract {
             telemetry.addLine("Wait - Strafing Left to build zone");
             driveTrainTelemetry();
             telemetry.update();
-            if (Kill(28)) {
+            if (autoTimer.seconds() > 25) {
+                driveTrain.stop();
                 break;
             }
         }
@@ -97,7 +100,8 @@ public class Auto_Red_Block_Grab_Foundation extends AutoLinearAbstract {
             telemetry.addLine("Wait - Moving forward to park");
             driveTrainTelemetry();
             telemetry.update();
-            if (Kill(28)) {
+            if (autoTimer.seconds() > 25) {
+                driveTrain.stop();
                 break;
             }
         }

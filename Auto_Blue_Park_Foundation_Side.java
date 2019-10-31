@@ -57,7 +57,8 @@ public class Auto_Blue_Park_Foundation_Side extends AutoLinearAbstract {
             telemetry.addLine("Wait - Strafing right to park area");
             driveTrainTelemetry();
             telemetry.update();
-            if (Kill(28)) {
+            if (autoTimer.seconds() > 25) {
+                driveTrain.stop();
                 break;
             }
         }
@@ -67,7 +68,8 @@ public class Auto_Blue_Park_Foundation_Side extends AutoLinearAbstract {
             telemetry.addLine("Wait - Moving up out of the way in the park area");
             driveTrainTelemetry();
             telemetry.update();
-            if (Kill(28)) {
+            if (autoTimer.seconds() > 25) {
+                driveTrain.stop();
                 break;
             }
         }

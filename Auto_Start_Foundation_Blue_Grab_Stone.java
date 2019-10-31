@@ -55,7 +55,7 @@ public class Auto_Start_Foundation_Blue_Grab_Stone extends AutoLinearAbstract {
             telemetry.addLine("Wait - Driving forwards");
             driveTrainTelemetry();
             telemetry.update();
-            if (autoTimer.seconds() > 25) {
+            if (Kill(28)) {
                 driveTrain.stop();
                 break;
             }
@@ -66,7 +66,7 @@ public class Auto_Start_Foundation_Blue_Grab_Stone extends AutoLinearAbstract {
             telemetry.addLine("Wait - Strafing Right");
             driveTrainTelemetry();
             telemetry.update();
-            if (autoTimer.seconds() > 25) {
+            if (Kill(28)) {
                 driveTrain.stop();
                 break;
             }
@@ -77,8 +77,7 @@ public class Auto_Start_Foundation_Blue_Grab_Stone extends AutoLinearAbstract {
         while (!scissorLift.isMoveDone(5)) {
             telemetry.addLine("Scissor Lift going down");
             motorTelemetryDegrees(scissorLift);
-            telemetry.update();
-            if (autoTimer.seconds() > 28) {
+            if (Kill(28)) {
                 scissorLift.stop();
                 break;
             }
@@ -89,15 +88,15 @@ public class Auto_Start_Foundation_Blue_Grab_Stone extends AutoLinearAbstract {
             telemetry.addLine("Wait - Moving Box Mover Out");
             motorTelemetryDegrees(boxMover);
             telemetry.update();
-            if (autoTimer.seconds() > 28) {
+            if (Kill(28)) {
                 boxMover.stop();
                 break;
             }
         }
 
 
-        scissorTop.goToPositionNow(SCISSOR_TOP_DOWN);
-        scissorSides.goToPositionNow(SCISSOR_SIDES_IN);
+        scissorTop.goToPosition(SCISSOR_TOP_DOWN, .5);
+        scissorSides.goToPosition(SCISSOR_SIDES_IN, .5);
 
 
         driveTrain.goStraightToTarget(4, DRIVE_TRAIN_DEFAULT_SPEED);
@@ -105,15 +104,15 @@ public class Auto_Start_Foundation_Blue_Grab_Stone extends AutoLinearAbstract {
             telemetry.addLine("Wait - Moving Forward");
             driveTrainTelemetry();
             telemetry.update();
-            if (autoTimer.seconds() > 28) {
+            if (Kill(28)) {
                 driveTrain.stop();
                 break;
             }
         }
 
 
-        scissorTop.goToPositionNow(SCISSOR_TOP_UP);
-        scissorSides.goToPositionNow(SCISSOR_SIDES_OUT);
+        scissorTop.goToPosition(SCISSOR_TOP_UP, .5);
+        scissorSides.goToPosition(SCISSOR_SIDES_OUT, .5);
 
 
         driveTrain.goStraightToTarget(-4, DRIVE_TRAIN_DEFAULT_SPEED);
@@ -121,7 +120,7 @@ public class Auto_Start_Foundation_Blue_Grab_Stone extends AutoLinearAbstract {
             telemetry.addLine("Wait - Moving Backwards");
             driveTrainTelemetry();
             telemetry.update();
-            if (autoTimer.seconds() > 28) {
+            if (Kill(28)) {
                 driveTrain.stop();
                 break;
             }
@@ -133,7 +132,7 @@ public class Auto_Start_Foundation_Blue_Grab_Stone extends AutoLinearAbstract {
             telemetry.addLine("Wait - Raising Arm");
             motorTelemetryDegrees(scissorLift);
             telemetry.update();
-            if (autoTimer.seconds() > 28) {
+            if (Kill(28)) {
                 driveTrain.stop();
                 break;
             }
@@ -145,7 +144,7 @@ public class Auto_Start_Foundation_Blue_Grab_Stone extends AutoLinearAbstract {
             telemetry.addLine("Wait - Strafing Left");
             driveTrainTelemetry();
             telemetry.update();
-            if (autoTimer.seconds() > 28) {
+            if (Kill(28)) {
                 driveTrain.stop();
                 break;
             }

@@ -57,7 +57,8 @@ public class Auto_Blue_Park_Block_Side extends AutoLinearAbstract {
             telemetry.addLine("Wait - Strafing left to park area");
             driveTrainTelemetry();
             telemetry.update();
-            if (Kill(28)) {
+            if (autoTimer.seconds() > 25) {
+                driveTrain.stop();
                 break;
             }
         }
@@ -67,7 +68,8 @@ public class Auto_Blue_Park_Block_Side extends AutoLinearAbstract {
             telemetry.addLine("Wait - Moving up out of the way");
             driveTrainTelemetry();
             telemetry.update();
-            if (Kill(28)) {
+            if (autoTimer.seconds() > 25) {
+                driveTrain.stop();
                 break;
             }
         }

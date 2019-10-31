@@ -55,7 +55,8 @@ public class Auto_Red_Start_Foundation_Grab_Stone extends AutoLinearAbstract {
             telemetry.addLine("Wait - Driving forwards");
             driveTrainTelemetry();
             telemetry.update();
-            if (Kill(28)) {
+            if (autoTimer.seconds() > 25) {
+                driveTrain.stop();
                 break;
             }
         }
@@ -65,7 +66,8 @@ public class Auto_Red_Start_Foundation_Grab_Stone extends AutoLinearAbstract {
             telemetry.addLine("Wait - Strafing Right");
             driveTrainTelemetry();
             telemetry.update();
-            if (Kill(28)) {
+            if (autoTimer.seconds() > 25) {
+                driveTrain.stop();
                 break;
             }
 
@@ -76,7 +78,8 @@ public class Auto_Red_Start_Foundation_Grab_Stone extends AutoLinearAbstract {
             telemetry.addLine("Scissor Lift going down");
             motorTelemetryDegrees(scissorLift);
             telemetry.update();
-            if (Kill(28)) {
+            if (autoTimer.seconds() > 28) {
+                scissorLift.stop();
                 break;
             }
         }
@@ -86,7 +89,8 @@ public class Auto_Red_Start_Foundation_Grab_Stone extends AutoLinearAbstract {
             telemetry.addLine("Wait - Moving Box Mover Out");
             motorTelemetryDegrees(boxMover);
             telemetry.update();
-            if (Kill(28)) {
+            if (autoTimer.seconds() > 28) {
+                boxMover.stop();
                 break;
             }
         }
@@ -101,7 +105,8 @@ public class Auto_Red_Start_Foundation_Grab_Stone extends AutoLinearAbstract {
             telemetry.addLine("Wait - Moving Forward");
             driveTrainTelemetry();
             telemetry.update();
-            if (Kill(28)) {
+            if (autoTimer.seconds() > 28) {
+                driveTrain.stop();
                 break;
             }
         }
@@ -116,7 +121,8 @@ public class Auto_Red_Start_Foundation_Grab_Stone extends AutoLinearAbstract {
             telemetry.addLine("Wait - Moving Backwards");
             driveTrainTelemetry();
             telemetry.update();
-            if (Kill(28)) {
+            if (autoTimer.seconds() > 28) {
+                driveTrain.stop();
                 break;
             }
         }
@@ -127,7 +133,8 @@ public class Auto_Red_Start_Foundation_Grab_Stone extends AutoLinearAbstract {
             telemetry.addLine("Wait - Raising Arm");
             motorTelemetryDegrees(scissorLift);
             telemetry.update();
-            if (Kill(28)) {
+            if (autoTimer.seconds() > 28) {
+                driveTrain.stop();
                 break;
             }
         }
@@ -138,7 +145,8 @@ public class Auto_Red_Start_Foundation_Grab_Stone extends AutoLinearAbstract {
             telemetry.addLine("Wait - Strafing Left");
             driveTrainTelemetry();
             telemetry.update();
-            if (Kill(28)) {
+            if (autoTimer.seconds() > 28) {
+                driveTrain.stop();
                 break;
             }
         }

@@ -33,13 +33,13 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
 
+/**
+ * Autonomous Opmode G2
+ */
 
-// Autonomous Opmode G2
-
-
-@Autonomous(name="Auto_Blue_Start_Foundation_Grab_Stone", group="Wired")
+@Autonomous(name="Auto_Basic_Skystone_Side", group="Wired")
 @Disabled
-public class Auto_Blue_Start_Foundation_Grab_Stone extends AutoLinearAbstract {
+public class Auto_Basic_Skystone_Side extends AutoLinearAbstract {
 
     // Declare OpMode members specific to this Autonomous Opmode variant.
 
@@ -48,37 +48,57 @@ public class Auto_Blue_Start_Foundation_Grab_Stone extends AutoLinearAbstract {
     public void runOpMode() {
 
 
+
+        // Execute the typical autonomous program elements.
+        // super.runOpMode finishes as soon as the Drive Station start/play button is pressed.
         super.runOpMode();
 
-        driveTrain.goStraightToTarget(26, DRIVE_TRAIN_DEFAULT_SPEED);
+
+        // Go straight to become parallel with blocks
+        driveTrain.goStraightToTarget(24, DRIVE_TRAIN_DEFAULT_SPEED);
         while (!driveTrain.isMoveDone(MAX_DRIVE_TRAIN_POSITION_ERROR_INCHES)) {
-            telemetry.addLine("Wait - Driving forwards");
+            telemetry.addLine("Wait - Drive train move straight to exit balancing stone");
             driveTrainTelemetry();
             telemetry.update();
-            if (autoTimer.seconds() > 25) {
+            if (Kill(28)) {
                 driveTrain.stop();
                 break;
             }
         }
 
-        driveTrain.StrafeRightToTarget(80, DRIVE_TRAIN_DEFAULT_SPEED);
+        driveTrain.StrafeRightToTarget(24, DRIVE_TRAIN_DEFAULT_SPEED);
         while (!driveTrain.isMoveDone(MAX_DRIVE_TRAIN_POSITION_ERROR_INCHES)) {
-            telemetry.addLine("Wait - Strafing Right");
+            telemetry.addLine("Wait - Drive train move straight to exit balancing stone");
             driveTrainTelemetry();
             telemetry.update();
-            if (autoTimer.seconds() > 25) {
+            if (Kill(28)) {
                 driveTrain.stop();
                 break;
             }
-
         }
 
-        scissorLift.goToAbsoluteDistance(0, .9);
-        while (!scissorLift.isMoveDone(5)) {
+
+
+        //Scan for skystone and then move towards that
+
+
+        driveTrain.goStraightToTarget(6, DRIVE_TRAIN_DEFAULT_SPEED);
+        while (!driveTrain.isMoveDone(MAX_DRIVE_TRAIN_POSITION_ERROR_INCHES)) {
+            telemetry.addLine("Wait - Drive train move straight to exit balancing stone");
+            driveTrainTelemetry();
+            telemetry.update();
+            if (Kill(28)) {
+                driveTrain.stop();
+                break;
+            }
+        }
+
+        scissorLift.goToAbsoluteDistance(0, .5);
+        while (!scissorLift.isMoveDone(5)){
             telemetry.addLine("Scissor Lift going down");
             motorTelemetryDegrees(scissorLift);
             telemetry.update();
-            if (autoTimer.seconds() > 28) {
+            if (Kill(28)) {
                 scissorLift.stop();
                 break;
             }
@@ -86,69 +106,67 @@ public class Auto_Blue_Start_Foundation_Grab_Stone extends AutoLinearAbstract {
 
         boxMover.goToAbsoluteDistance(BOX_MOVER_OUT, .7);
         while (!boxMover.isMoveDone(5)) {
-            telemetry.addLine("Wait - Moving Box Mover Out");
+            telemetry.addLine("Box mover going out");
             motorTelemetryDegrees(boxMover);
             telemetry.update();
-            if (autoTimer.seconds() > 28) {
+            if (Kill(28)) {
                 boxMover.stop();
                 break;
             }
         }
 
 
-        scissorTop.goToPositionNow(SCISSOR_TOP_DOWN);
-        scissorSides.goToPositionNow(SCISSOR_SIDES_IN);
 
+        scissorSides.goToPosition(SCISSOR_SIDES_IN, .5);
+        scissorTop.goToPosition(SCISSOR_TOP_DOWN, .5);
 
-        driveTrain.goStraightToTarget(4, DRIVE_TRAIN_DEFAULT_SPEED);
-        while (!driveTrain.isMoveDone(5)) {
-            telemetry.addLine("Wait - Moving Forward");
-            driveTrainTelemetry();
-            telemetry.update();
-            if (autoTimer.seconds() > 28) {
-                driveTrain.stop();
-                break;
-            }
-        }
-
-
-        scissorTop.goToPositionNow(SCISSOR_TOP_UP);
-        scissorSides.goToPositionNow(SCISSOR_SIDES_OUT);
-
+        //Box mover in position
+        //Go back wards with direction that the skystone was
 
         driveTrain.goStraightToTarget(-4, DRIVE_TRAIN_DEFAULT_SPEED);
-        while (!driveTrain.isMoveDone(5)) {
-            telemetry.addLine("Wait - Moving Backwards");
+        while (!driveTrain.isMoveDone(MAX_DRIVE_TRAIN_POSITION_ERROR_INCHES)) {
+            telemetry.addLine("Wait - Drive train move straight to exit balancing stone");
             driveTrainTelemetry();
             telemetry.update();
-            if (autoTimer.seconds() > 28) {
+            if (Kill(28)) {
                 driveTrain.stop();
                 break;
             }
         }
 
-
-        scissorLift.goToAbsoluteDistance(100, .5);
-        while (!scissorLift.isMoveDone(5)) {
-            telemetry.addLine("Wait - Raising Arm");
-            motorTelemetryDegrees(scissorLift);
-            telemetry.update();
-            if (autoTimer.seconds() > 28) {
-                driveTrain.stop();
-                break;
-            }
-        }
-
-
-        driveTrain.StrafeLeftToTarget(32, DRIVE_TRAIN_DEFAULT_SPEED);
-        while (!driveTrain.isMoveDone(5)) {
-            telemetry.addLine("Wait - Strafing Left");
+        driveTrain.StrafeLeftToTarget(96, DRIVE_TRAIN_DEFAULT_SPEED);
+        while (!driveTrain.isMoveDone(MAX_DRIVE_TRAIN_POSITION_ERROR_INCHES)) {
+            telemetry.addLine("Wait - Drive train move straight to exit balancing stone");
             driveTrainTelemetry();
             telemetry.update();
-            if (autoTimer.seconds() > 28) {
+            if (Kill(28)) {
                 driveTrain.stop();
                 break;
             }
         }
+
+        driveTrain.goStraightToTarget(4, DRIVE_TRAIN_DEFAULT_SPEED);
+        while (!driveTrain.isMoveDone(MAX_DRIVE_TRAIN_POSITION_ERROR_INCHES)) {
+            telemetry.addLine("Wait - Drive train move straight to exit balancing stone");
+            driveTrainTelemetry();
+            telemetry.update();
+            if (Kill(28)) {
+                driveTrain.stop();
+                break;
+            }
+        }
+
+
+        scissorTop.goToPosition(SCISSOR_TOP_UP, .5);
+        scissorSides.goToPosition(SCISSOR_SIDES_OUT, .5);
+
+
+
+
+
     }
 }
+
+
+
+

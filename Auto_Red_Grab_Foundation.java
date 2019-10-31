@@ -57,11 +57,11 @@ public class Auto_Red_Grab_Foundation extends AutoLinearAbstract {
             telemetry.addLine("Wait - Strafing right to foundation");
             driveTrainTelemetry();
             telemetry.update();
-            if (Kill(28)) {
+            if (autoTimer.seconds() > 25) {
+                driveTrain.stop();
                 break;
             }
         }
-
 
 
         clawServoLeft.goToPositionNow(CLAW_SERVO_LEFT_DOWN);
@@ -72,7 +72,8 @@ public class Auto_Red_Grab_Foundation extends AutoLinearAbstract {
             telemetry.addLine("Wait - Strafing Left to build zone");
             driveTrainTelemetry();
             telemetry.update();
-            if (Kill(28)) {
+            if (autoTimer.seconds() > 25) {
+                driveTrain.stop();
                 break;
             }
         }
@@ -87,7 +88,8 @@ public class Auto_Red_Grab_Foundation extends AutoLinearAbstract {
             telemetry.addLine("Wait - Moving forward to park");
             driveTrainTelemetry();
             telemetry.update();
-            if (Kill(28)) {
+            if (autoTimer.seconds() > 25) {
+                driveTrain.stop();
                 break;
             }
         }

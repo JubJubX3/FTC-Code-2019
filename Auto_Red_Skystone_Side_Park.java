@@ -36,8 +36,8 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
  * Autonomous Opmode G2
  */
 
-@Autonomous(name="Auto_Red_Skystone_Side", group="Wired")
-public class Auto_Red_Skystone_Side extends AutoLinearAbstract {
+@Autonomous(name="Auto_Red_Skystone_Side_Park", group="Wired")
+public class Auto_Red_Skystone_Side_Park extends AutoLinearAbstract {
 
     // Declare OpMode members specific to this Autonomous Opmode variant.
 
@@ -159,6 +159,15 @@ public class Auto_Red_Skystone_Side extends AutoLinearAbstract {
             }
         }
 
+        driveTrain.StrafeLeftToTarget(48, DRIVE_TRAIN_DEFAULT_SPEED);
+        while (!driveTrain.isMoveDone(MAX_DRIVE_TRAIN_POSITION_ERROR_INCHES)) {
+            telemetry.addLine("Strafing right to foundation");
+            driveTrainTelemetry();
+            telemetry.update();
+            if (Kill(28)) {
+                break;
+            }
+        }
 
     }
 }

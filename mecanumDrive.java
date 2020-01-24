@@ -105,7 +105,7 @@ public class mecanumDrive extends FourWheelDrive
 
     public void StrafeLeftToTarget(double distance, double speed) {
 
-        this.StrafeToTarget(distance, -distance, speed);
+        this.StrafeToTarget(-distance, distance, speed);
 
     }
 
@@ -113,7 +113,7 @@ public class mecanumDrive extends FourWheelDrive
 
     public void StrafeRightToTarget(double distance, double speed) {
 
-        this.StrafeToTarget(-distance, distance, speed);
+        this.StrafeToTarget(distance, -distance, speed);
 
     }
 

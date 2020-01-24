@@ -152,6 +152,7 @@ public class DeviceTargetMotor
      * ------------------------------------------------------- */
     public void resetEncoder() {
         targetMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);  // Stop motor and reset encoder
+        targetMotor.setTargetPosition(0);
         targetMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);         // Set mode to "RUN_TO_POSITION"
         targetCount = 0;        // Reset target status values
         targetPosition = 0;

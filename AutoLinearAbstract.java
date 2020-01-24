@@ -65,8 +65,7 @@ public abstract class AutoLinearAbstract extends LinearOpMode {
             scissorLift;
 
     DeviceTargetServo
-            scissorTop,
-            scissorSides,
+            boxGrabber,
             clawServoLeft,
             clawServoRight;
 
@@ -88,17 +87,15 @@ public abstract class AutoLinearAbstract extends LinearOpMode {
             DRIVE_TRAIN_DEFAULT_SPEED = 0.5,
             DRIVE_TRAIN_STRAIGHT_SPEED = 0.6,
 
-            SCISSOR_TOP_UP = 0.8,
-            SCISSOR_TOP_DOWN = 0,
-            SCISSOR_SIDES_OUT = 0,
-            SCISSOR_SIDES_IN = 0.8,
+            BOX_GRABBER_CLOSED = 0.3,
+            BOX_GRABBER_OPEN = 0.6,
             BOX_MOVER_OUT = 3000,
             BOX_MOVER_IN = 0,
             BOX_MOVER_INIT_POS = 0.50,
-            CLAW_SERVO_LEFT_UP = 0.65,
-            CLAW_SERVO_LEFT_DOWN = 0.05,
-            CLAW_SERVO_RIGHT_UP = 0.05,
-            CLAW_SERVO_RIGHT_DOWN = 0.65;
+            CLAW_SERVO_LEFT_UP = 0.55,
+            CLAW_SERVO_LEFT_DOWN = 0.95,
+            CLAW_SERVO_RIGHT_UP = 0.47,
+            CLAW_SERVO_RIGHT_DOWN = 0.08;
 
 
     final static boolean
@@ -124,20 +121,24 @@ public abstract class AutoLinearAbstract extends LinearOpMode {
 
         /* Drive Train constructor: hardwareMap, left motor name, left motor direction, right motor name, right motor direction,
                                     encoder counts per output shaft revolution, gear ratio, wheel radius */
-        driveTrain = new mecanumDrive(hardwareMap,"front_left_drive",FORWARD,"front_right_drive",REVERSE,"rear_left_drive",FORWARD ,"front_right_drive",REVERSE,1120,1.0,2.0);
+        driveTrain = new mecanumDrive(hardwareMap,"front_left_drive",REVERSE,"front_right_drive",FORWARD,"rear_left_drive",REVERSE,"rear_right_drive",FORWARD,1120,1.0,2.0);
 
         /* Target-Motor constructor: hardwareMap, motor name, motor direction,
                               encoder counts per output shaft revolution, gear ratio, wheel radius */
-        scissorLift = new DeviceTargetMotor(hardwareMap,"scissor_lift",REVERSE,1680,13*24/16);
-        boxMover = new DeviceTargetMotor(hardwareMap, "box_mover", REVERSE, 1440);
+        scissorLift = new DeviceTargetMotor(hardwareMap,"scissor_lift",REVERSE,1440,1);
+
+        boxMover = new DeviceTargetMotor(hardwareMap,"box_mover",REVERSE,1440);
+
+
+
         /* Color sensor constructor: hardwareMap, sensor name, sensor I2C address */
         // colorLeftJewel = new DeviceColorSensor(hardwareMap,"left_jewel_color",0x3c);
         //   colorRightJewel = new DeviceColorSensor(hardwareMap,"right_jewel_color",0x30);
 
         /* Target-Servo constructor: hardwareMap, servo name, initial servo position */
-        scissorTop = new DeviceTargetServo(hardwareMap,"scissor_top", SCISSOR_TOP_UP);
-        scissorSides = new DeviceTargetServo(hardwareMap,"scissor_sides", SCISSOR_SIDES_OUT);
-        clawServoLeft = new DeviceTargetServo(hardwareMap, "claw_servo", CLAW_SERVO_LEFT_UP);
+        boxGrabber = new DeviceTargetServo(hardwareMap,"box_grabber",BOX_GRABBER_OPEN);
+        clawServoLeft = new DeviceTargetServo(hardwareMap, "claw_servo_left", CLAW_SERVO_LEFT_UP);
+        clawServoRight = new DeviceTargetServo(hardwareMap, "claw_servo_right",CLAW_SERVO_RIGHT_UP);
         /* INITIALIZE ROBOT - INITIALIZE ROBOT OBJECTS AND CLASSES*/
 
 
@@ -158,19 +159,10 @@ public abstract class AutoLinearAbstract extends LinearOpMode {
         driveTrain.rear.motorLeft.goToAbsoluteDistance(driveTrain.rear.motorLeft.getPosition(), DRIVE_TRAIN_DEFAULT_SPEED);
         driveTrain.rear.motorRight.goToAbsoluteDistance(driveTrain.rear.motorRight.getPosition(), DRIVE_TRAIN_DEFAULT_SPEED);
 
-
-
         // Note: Servo initialization is completed in the respective object constructors
 
 
         /* INITIALIZE ROBOT - SIGNAL INITIALIZATION COMPLETE */
-
-        // Notify drive station that initialization is wrapping up
-        telemetry.addLine("Wait - Initializing Almost Complete");
-        telemetry.update();
-
-
-
 
 
         // Report initialization complete
@@ -197,8 +189,7 @@ public abstract class AutoLinearAbstract extends LinearOpMode {
      * Purpose: Report the position and speed of the drive train wheels
      * ------------------------------------------------------- */
     void driveTrainTelemetry () {
-        telemetry.addLine();
-        telemetry.addLine("Left Drive Motor");
+        telemetry.addLine("Left Drive Front Motor");
         telemetry.addData("  Position in EngUnits","%.2f", driveTrain.front.motorLeft.getPosition());
         telemetry.addData("  Target in EngUnits","%.2f", driveTrain.front.motorLeft.targetPosition);
         telemetry.addData("  Position in Counts",driveTrain.front.motorLeft.targetMotor.getCurrentPosition());
@@ -207,7 +198,7 @@ public abstract class AutoLinearAbstract extends LinearOpMode {
         telemetry.addData("  Speed",driveTrain.front.leftSpeed);
 
 
-        telemetry.addLine("Left Drive Motor");
+        telemetry.addLine("Left Drive Rear Motor");
         telemetry.addData("  Position in EngUnits","%.2f", driveTrain.rear.motorLeft.getPosition());
         telemetry.addData("  Target in EngUnits","%.2f", driveTrain.rear.motorLeft.targetPosition);
         telemetry.addData("  Position in Counts",driveTrain.rear.motorLeft.targetMotor.getCurrentPosition());
@@ -215,8 +206,7 @@ public abstract class AutoLinearAbstract extends LinearOpMode {
         telemetry.addData("  Is Busy",driveTrain.rear.motorLeft.targetMotor.isBusy());
         telemetry.addData("  Speed",driveTrain.rear.leftSpeed);
 
-        telemetry.addLine();
-        telemetry.addLine("Right Drive Motor");
+        telemetry.addLine("Right Drive Front Motor");
         telemetry.addData("  Position in EngUnits","%.2f", driveTrain.front.motorRight.getPosition());
         telemetry.addData("  Target in EngUnits","%.2f", driveTrain.front.motorRight.targetPosition);
         telemetry.addData("  Position in Counts",driveTrain.front.motorRight.targetMotor.getCurrentPosition());
@@ -224,6 +214,7 @@ public abstract class AutoLinearAbstract extends LinearOpMode {
         telemetry.addData("  Is Busy",driveTrain.front.motorRight.targetMotor.isBusy());
         telemetry.addData("  Speed",driveTrain.front. rightSpeed);
 
+        telemetry.addLine("Right Drive Rear Motor");
         telemetry.addData("  Position in EngUnits","%.2f", driveTrain.rear.motorRight.getPosition());
         telemetry.addData("  Target in EngUnits","%.2f", driveTrain.rear.motorRight.targetPosition);
         telemetry.addData("  Position in Counts",driveTrain.rear.motorRight.targetMotor.getCurrentPosition());
@@ -232,39 +223,32 @@ public abstract class AutoLinearAbstract extends LinearOpMode {
         telemetry.addData("  Speed",driveTrain.rear. rightSpeed);
     }
 
+
+
     void motorTelemetryDegrees (DeviceTargetMotor motor) {
         telemetry.addLine();
         telemetry.addLine(motor.name);
         telemetry.addData(" Position in Degrees", "%.2f degrees ", motor.getDegrees());
         telemetry.addData(" Position in Counts", motor.targetMotor.getCurrentPosition());
-    }
-        boolean Kill ( double autoTime) {
-            boolean eStop;
-            if(!opModeIsActive()) {
+}
 
-                driveTrain.stop();
-                scissorLift.stop();
+    boolean Kill ( double autoTime) {
+        boolean eStop;
+        if(!opModeIsActive() || autoTimer.seconds()>= autoTime) {
 
-                eStop = true;
+            driveTrain.stop();
+            scissorLift.stop();
 
-            }
-            else
-                eStop = false;
-
-            return eStop || autoTimer.seconds()>= autoTime;
-
-
+            eStop = true;
 
         }
+        else
+            eStop = false;
 
-
-
-
+        return eStop;
 
 
 
     }
 
-
-
-
+}

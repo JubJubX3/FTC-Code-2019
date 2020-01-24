@@ -36,8 +36,8 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
  * Autonomous Opmode G2
  */
 
-@Autonomous(name="Auto_Red_Skystone_Side", group="Wired")
-public class Auto_Red_Skystone_Side extends AutoLinearAbstract {
+@Autonomous(name="Auto_Blue_Skystone_Side_Park", group="Wired")
+public class Auto_Blue_Skystone_Side_Park extends AutoLinearAbstract {
 
     // Declare OpMode members specific to this Autonomous Opmode variant.
 
@@ -55,7 +55,7 @@ public class Auto_Red_Skystone_Side extends AutoLinearAbstract {
         // Go straight to become parallel with blocks
         driveTrain.goStraightToTarget(24, DRIVE_TRAIN_DEFAULT_SPEED);
         while (!driveTrain.isMoveDone(MAX_DRIVE_TRAIN_POSITION_ERROR_INCHES)) {
-            telemetry.addLine("Moving straight to align with blocks");
+            telemetry.addLine("Wait - Move to align with blocks");
             driveTrainTelemetry();
             telemetry.update();
             if (Kill(28)) {
@@ -63,9 +63,9 @@ public class Auto_Red_Skystone_Side extends AutoLinearAbstract {
             }
         }
 
-        driveTrain.StrafeLeftToTarget(24, DRIVE_TRAIN_DEFAULT_SPEED);
+        driveTrain.StrafeRightToTarget(24, DRIVE_TRAIN_DEFAULT_SPEED);
         while (!driveTrain.isMoveDone(MAX_DRIVE_TRAIN_POSITION_ERROR_INCHES)) {
-            telemetry.addLine("Moving left to be by blocks");
+            telemetry.addLine("Wait - Strafing right to blocks");
             driveTrainTelemetry();
             telemetry.update();
             if (Kill(28)) {
@@ -80,7 +80,7 @@ public class Auto_Red_Skystone_Side extends AutoLinearAbstract {
 
         driveTrain.goStraightToTarget(6, DRIVE_TRAIN_DEFAULT_SPEED);
         while (!driveTrain.isMoveDone(MAX_DRIVE_TRAIN_POSITION_ERROR_INCHES)) {
-            telemetry.addLine("Moving to the blocks");
+            telemetry.addLine("Wait - Moving up next to the blocks");
             driveTrainTelemetry();
             telemetry.update();
             if (Kill(28)) {
@@ -117,7 +117,7 @@ public class Auto_Red_Skystone_Side extends AutoLinearAbstract {
 
         driveTrain.goStraightToTarget(-4, DRIVE_TRAIN_DEFAULT_SPEED);
         while (!driveTrain.isMoveDone(MAX_DRIVE_TRAIN_POSITION_ERROR_INCHES)) {
-            telemetry.addLine("Moving backwards to get out of the way");
+            telemetry.addLine("Wait - Moving backwards out of the way");
             driveTrainTelemetry();
             telemetry.update();
             if (Kill(28)) {
@@ -125,9 +125,9 @@ public class Auto_Red_Skystone_Side extends AutoLinearAbstract {
             }
         }
 
-        driveTrain.StrafeRightToTarget(96, DRIVE_TRAIN_DEFAULT_SPEED);
+        driveTrain.StrafeLeftToTarget(96, DRIVE_TRAIN_DEFAULT_SPEED);
         while (!driveTrain.isMoveDone(MAX_DRIVE_TRAIN_POSITION_ERROR_INCHES)) {
-            telemetry.addLine("Strafing right to foundation");
+            telemetry.addLine("Wait - Strafing left to foundation");
             driveTrainTelemetry();
             telemetry.update();
             if (Kill(28)) {
@@ -137,7 +137,7 @@ public class Auto_Red_Skystone_Side extends AutoLinearAbstract {
 
         driveTrain.goStraightToTarget(4, DRIVE_TRAIN_DEFAULT_SPEED);
         while (!driveTrain.isMoveDone(MAX_DRIVE_TRAIN_POSITION_ERROR_INCHES)) {
-            telemetry.addLine("Moving to foundation");
+            telemetry.addLine("Wait - Moving up to the foundation");
             driveTrainTelemetry();
             telemetry.update();
             if (Kill(28)) {
@@ -148,7 +148,6 @@ public class Auto_Red_Skystone_Side extends AutoLinearAbstract {
 
         boxGrabber.goToPosition(BOX_GRABBER_OPEN,.02);
 
-
         driveTrain.goStraightToTarget(-4, DRIVE_TRAIN_DEFAULT_SPEED);
         while (!driveTrain.isMoveDone(MAX_DRIVE_TRAIN_POSITION_ERROR_INCHES)) {
             telemetry.addLine("Wait - Moving backwards out of the way");
@@ -158,6 +157,17 @@ public class Auto_Red_Skystone_Side extends AutoLinearAbstract {
                 break;
             }
         }
+
+        driveTrain.StrafeRightToTarget(48, DRIVE_TRAIN_DEFAULT_SPEED);
+        while (!driveTrain.isMoveDone(MAX_DRIVE_TRAIN_POSITION_ERROR_INCHES)) {
+            telemetry.addLine("Wait - Strafing left to foundation");
+            driveTrainTelemetry();
+            telemetry.update();
+            if (Kill(28)) {
+                break;
+            }
+        }
+
 
 
     }

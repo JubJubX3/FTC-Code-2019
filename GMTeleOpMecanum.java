@@ -23,8 +23,13 @@ public class GMTeleOpMecanum extends OpMode{
 
     private boolean //declares all private booleans and their initial values (true or false)
             scissorLiftMove = false,
+            bPressed = false,
+            xPressed = false,
             moveBoxMover = false;
 
+    final int
+            LIFT_MAX = 6,
+            LIFT_MIN = 0;
 
 
     /*
@@ -41,7 +46,8 @@ public class GMTeleOpMecanum extends OpMode{
 
         //this will send a telemetry message to signify robot waiting;
         telemetry.addData("Say", "Hello Driver");    //
-
+        bPressed = false;
+        xPressed = false;
     }
 
     /*
@@ -76,10 +82,10 @@ public class GMTeleOpMecanum extends OpMode{
 //						GamePad One
 //==========================================================
 
-        float FLspeed = gamepad1.left_stick_y - gamepad1.left_stick_x;
-        float BLspeed = gamepad1.left_stick_y + gamepad1.left_stick_x;
-        float FRspeed = gamepad1.right_stick_y + gamepad1.right_stick_x;
-        float BRspeed = gamepad1.right_stick_y - gamepad1.right_stick_x;
+        float FLspeed = -gamepad1.left_stick_y + gamepad1.left_stick_x;
+        float BLspeed = -gamepad1.left_stick_y - gamepad1.left_stick_x;
+        float FRspeed = -gamepad1.right_stick_y - gamepad1.right_stick_x;
+        float BRspeed = -gamepad1.right_stick_y + gamepad1.right_stick_x;
 
 
         FLspeed = Range.clip(FLspeed, -1, 1);
@@ -98,7 +104,7 @@ public class GMTeleOpMecanum extends OpMode{
 
         if (gamepad1.right_trigger >= 0.10) {
 
-            robot.scissorLift.setTargetPosition(robot.SCISSOR_DOWN_POS); // attatchment to the lander
+            robot.scissorLift.setTargetPosition(robot.SCISSOR_DOWN_POS);
             pullupspeed = gamepad1.right_trigger * robot.SCISSOR_MOTOR_SPEED_FACTOR;
             robot.scissorLift.setPower(pullupspeed);
             scissorLiftMove = true;
@@ -138,19 +144,15 @@ public class GMTeleOpMecanum extends OpMode{
             moveBoxMover = false;
         }
 
-        /*
-        if (gamepad1.dpad_up) {
-        */
+
 
 
         if (gamepad1.left_bumper) {
-            robot.scissorSides.setPosition(robot.SCISSOR_SIDES_OUT);
-            robot.scissorTop.setPosition(robot.SCISSOR_TOP_UP);
+            robot.boxGrabber.setPosition(robot.BOX_GRABBER_OPEN);
         }
 
         if (gamepad1.right_bumper) {
-            robot.scissorSides.setPosition(robot.SCISSOR_SIDES_IN);
-            robot.scissorTop.setPosition(robot.SCISSOR_TOP_DOWN);
+            robot.boxGrabber.setPosition(robot.BOX_GRABBER_CLOSED);
         }
 
 
@@ -164,17 +166,64 @@ public class GMTeleOpMecanum extends OpMode{
             robot.clawServoRight.setPosition(robot.CLAW_SERVO_RIGHT_DOWN);
         }
 
+        if (gamepad1.b) {
+            robot.clawServoLeft.setPosition(robot.CLAW_SERVO_LEFT_UP);
+            robot.clawServoRight.setPosition(robot.CLAW_SERVO_RIGHT_UP);
+            robot.boxGrabber.setPosition(robot.BOX_GRABBER_CLOSED);
+
+            robot.boxMover.setTargetPosition(robot.BOX_MOVER_IN);
+            robot.boxMover.setPower(robot.BOX_MOVER_SAFE_SPEED_FACTOR);
+
+            robot.scissorLift.setTargetPosition(robot.SCISSOR_SAFE_POS);
+            robot.scissorLift.setPower(robot.SCISSOR_SAFE_SPEED_FACTOR);
+
+
+        }
+
 
 
 
 
 //==========================================================
 //						GamePad Two
-//==========================================================
+//=========================================================
+// =
 //Change Collection Lift to joysticks/ add new gear ratio 4.5:1 with new motor never rest 60
 
+       if (gamepad2.a) {
+           robot.scissorLift.setTargetPosition(robot.SCISSOR_DOWN_POS);
+           robot.indexLift = 0;
+        }
 
+       if (gamepad2.b) {
+           if (!bPressed){
+               robot.indexLift = robot.indexLift + 1;
+               bPressed = true;
+           }
+           if (robot.indexLift > LIFT_MAX) {
+               robot.indexLift = LIFT_MAX;
+           }
+           robot.scissorLift.setTargetPosition(robot.scissorposition[robot.indexLift]);
+       }
+       else
+           bPressed = false;
 
+        if (gamepad2.x) {
+            if (!xPressed){
+                robot.indexLift = robot.indexLift - 1;
+                xPressed = true;
+            }
+            if (robot.indexLift < LIFT_MIN) {
+                robot.indexLift = LIFT_MIN;
+            }
+            robot.scissorLift.setTargetPosition(robot.scissorposition[robot.indexLift]);
+        }
+        else
+            xPressed = false;
+
+        if (gamepad2.y) {
+            robot.scissorLift.setTargetPosition(robot.SCISSOR_UP_POS);
+        }
 
 
 
@@ -201,6 +250,10 @@ public class GMTeleOpMecanum extends OpMode{
 
         telemetry.addData("BLMotor", robot.rearLeftDrive.getCurrentPosition());
         telemetry.addData("FLMotor", robot.frontLeftDrive.getCurrentPosition());
+
+        telemetry.addData("Box Mover",robot.boxMover.getCurrentPosition());
+        telemetry.addData("Dpad Down",gamepad1.dpad_down);
+        telemetry.addData("Dpad Up",gamepad1.dpad_up);
     }
 
     /*

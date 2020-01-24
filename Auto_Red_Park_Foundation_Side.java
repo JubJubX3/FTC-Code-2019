@@ -36,7 +36,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
  * Autonomous Opmode G2
  */
 
-@Autonomous(name="Red_Auto_Basic_Park_Foundation_Side", group="Wired")
+@Autonomous(name="Auto_Red__Park_Foundation_Side", group="Wired")
 public class Auto_Red_Park_Foundation_Side extends AutoLinearAbstract {
 
     // Declare OpMode members specific to this Autonomous Opmode variant.
@@ -53,22 +53,20 @@ public class Auto_Red_Park_Foundation_Side extends AutoLinearAbstract {
 
         driveTrain.StrafeLeftToTarget(40,DRIVE_TRAIN_DEFAULT_SPEED);
         while (!driveTrain.isMoveDone(MAX_DRIVE_TRAIN_POSITION_ERROR_INCHES)) {
-            telemetry.addLine("Wait - Strafing left to park area");
+            telemetry.addLine("Strafing left to park area");
             driveTrainTelemetry();
             telemetry.update();
-            if (autoTimer.seconds() > 25) {
-                driveTrain.stop();
+            if (Kill(28)) {
                 break;
             }
         }
 
         driveTrain.goStraightToTarget(24,DRIVE_TRAIN_DEFAULT_SPEED);
         while (!driveTrain.isMoveDone(MAX_DRIVE_TRAIN_POSITION_ERROR_INCHES)) {
-            telemetry.addLine("Wait - Moving straight in park area");
+            telemetry.addLine("Moving straight in park area");
             driveTrainTelemetry();
             telemetry.update();
-            if (autoTimer.seconds() > 25) {
-                driveTrain.stop();
+            if (Kill(28)) {
                 break;
             }
         }

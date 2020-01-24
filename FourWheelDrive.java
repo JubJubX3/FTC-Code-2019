@@ -206,8 +206,8 @@ public class FourWheelDrive
      *    + This method employs the methods inherent in the DeviceMotorTarget class
      * ------------------------------------------------------- */
     public void turnCwToTarget (double distance, double speed) {
-        front.turnCcwToTarget(distance, speed);
-       rear.turnCcwToTarget(distance, speed);
+        front.turnCwToTarget(distance, speed);
+       rear.turnCwToTarget(distance, speed);
 
     }
 

@@ -30,15 +30,14 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
 
 /**
  * Autonomous Opmode G2
  */
 
-@Autonomous(name="Auto_Blue_Park_Block_Side", group="Wired")
-public class Auto_Blue_Park_Block_Side extends AutoLinearAbstract {
+@Autonomous(name="Auto_Blue_Wait_Park_Block_Side", group="Wired")
+public class Auto_Blue_Wait_Park_Block_Side extends AutoLinearAbstract {
 
     // Declare OpMode members specific to this Autonomous Opmode variant.
 
@@ -51,6 +50,15 @@ public class Auto_Blue_Park_Block_Side extends AutoLinearAbstract {
         // Execute the typical autonomous program elements.
         // super.runOpMode finishes as soon as the Drive Station start/play button is pressed.
         super.runOpMode();
+
+
+        generalTimer.reset();
+        while (generalTimer.seconds() < 18) {
+            if (Kill(28)) {
+                break;
+            }
+        }
+
 
         driveTrain.StrafeLeftToTarget(40,DRIVE_TRAIN_DEFAULT_SPEED);
         while (!driveTrain.isMoveDone(MAX_DRIVE_TRAIN_POSITION_ERROR_INCHES)) {

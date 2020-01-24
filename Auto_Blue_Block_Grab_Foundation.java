@@ -35,7 +35,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 // Autonomous Opmode G2
 
 
-@Autonomous(name="Auto_Blue_Grab_Foundation", group="Wired")
+@Autonomous(name="Auto_Blue_Block_Grab_Foundation", group="Wired")
 public class Auto_Blue_Block_Grab_Foundation extends AutoLinearAbstract {
 
     // Declare OpMode members specific to this Autonomous Opmode variant.
@@ -52,13 +52,12 @@ public class Auto_Blue_Block_Grab_Foundation extends AutoLinearAbstract {
 
 
         // Go straight to become paralell with blocks
-        driveTrain.StrafeLeftToTarget(26, DRIVE_TRAIN_DEFAULT_SPEED);
+        driveTrain.StrafeRightToTarget(26, DRIVE_TRAIN_DEFAULT_SPEED);
         while (!driveTrain.isMoveDone(MAX_DRIVE_TRAIN_POSITION_ERROR_INCHES)) {
             telemetry.addLine("Wait - Strafing left to foundation");
             driveTrainTelemetry();
             telemetry.update();
-            if (autoTimer.seconds() > 25) {
-                driveTrain.stop();
+            if (Kill(28)) {
                 break;
             }
         }
@@ -69,29 +68,27 @@ public class Auto_Blue_Block_Grab_Foundation extends AutoLinearAbstract {
             telemetry.addLine("Wait - Moving to park area");
             driveTrainTelemetry();
             telemetry.update();
-            if (autoTimer.seconds() > 25) {
-                driveTrain.stop();
+            if (Kill(28)) {
                 break;
             }
         }
 
-        clawServoLeft.goToPositionNow(CLAW_SERVO_LEFT_DOWN);
-        clawServoRight.goToPositionNow(CLAW_SERVO_RIGHT_DOWN);
+        clawServoLeft.goToPosition(CLAW_SERVO_LEFT_DOWN,.02);
+        clawServoRight.goToPosition(CLAW_SERVO_RIGHT_DOWN, .02);
 
-        driveTrain.StrafeRightToTarget(26, DRIVE_TRAIN_DEFAULT_SPEED);
+        driveTrain.StrafeLeftToTarget(26, DRIVE_TRAIN_DEFAULT_SPEED);
         while (!driveTrain.isMoveDone(MAX_DRIVE_TRAIN_POSITION_ERROR_INCHES)) {
             telemetry.addLine("Wait - Strafing right to park foundation");
             driveTrainTelemetry();
             telemetry.update();
-            if (autoTimer.seconds() > 25) {
-                driveTrain.stop();
+            if (Kill(28)) {
                 break;
             }
         }
 
 
-        clawServoLeft.goToPositionNow(CLAW_SERVO_LEFT_UP);
-        clawServoRight.goToPositionNow(CLAW_SERVO_RIGHT_UP);
+        clawServoLeft.goToPosition(CLAW_SERVO_LEFT_UP,.02);
+        clawServoRight.goToPosition(CLAW_SERVO_RIGHT_UP,.02);
 
 
         driveTrain.goStraightToTarget(-48, DRIVE_TRAIN_DEFAULT_SPEED);
@@ -99,8 +96,7 @@ public class Auto_Blue_Block_Grab_Foundation extends AutoLinearAbstract {
             telemetry.addLine("Wait - Moving to park area");
             driveTrainTelemetry();
             telemetry.update();
-            if (autoTimer.seconds() > 25) {
-                driveTrain.stop();
+            if (Kill(28)) {
                 break;
             }
         }

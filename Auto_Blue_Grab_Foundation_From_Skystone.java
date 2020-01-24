@@ -35,7 +35,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 // Autonomous Opmode G2
 
 
-@Autonomous(name="Auto_Blue_Grab_Foundation", group="Wired")
+@Autonomous(name="Auto_Blue_Grab_Foundation_From_Skystone", group="Wired")
 public class Auto_Blue_Grab_Foundation_From_Skystone extends AutoLinearAbstract {
 
     // Declare OpMode members specific to this Autonomous Opmode variant.
@@ -57,8 +57,7 @@ public class Auto_Blue_Grab_Foundation_From_Skystone extends AutoLinearAbstract 
             telemetry.addLine("Wait - Strafing right to foundation");
             driveTrainTelemetry();
             telemetry.update();
-            if (autoTimer.seconds() > 25) {
-                driveTrain.stop();
+            if (Kill(28)) {
                 break;
             }
         }
@@ -69,29 +68,27 @@ public class Auto_Blue_Grab_Foundation_From_Skystone extends AutoLinearAbstract 
             telemetry.addLine("Wait - Moving forward to park");
             driveTrainTelemetry();
             telemetry.update();
-            if (autoTimer.seconds() > 25) {
-                driveTrain.stop();
+            if (Kill(28)) {
                 break;
             }
         }
 
-        clawServoLeft.goToPositionNow(CLAW_SERVO_LEFT_DOWN);
-        clawServoRight.goToPositionNow(CLAW_SERVO_RIGHT_DOWN);
+        clawServoLeft.goToPosition(CLAW_SERVO_LEFT_DOWN,.02);
+        clawServoRight.goToPosition(CLAW_SERVO_RIGHT_DOWN,.02);
 
         driveTrain.StrafeLeftToTarget(26, DRIVE_TRAIN_DEFAULT_SPEED);
         while (!driveTrain.isMoveDone(MAX_DRIVE_TRAIN_POSITION_ERROR_INCHES)) {
             telemetry.addLine("Wait - Strafing Left to build zone");
             driveTrainTelemetry();
             telemetry.update();
-            if (autoTimer.seconds() > 25) {
-                driveTrain.stop();
+            if (Kill(28)) {
                 break;
             }
         }
 
 
-        clawServoLeft.goToPositionNow(CLAW_SERVO_LEFT_UP);
-        clawServoRight.goToPositionNow(CLAW_SERVO_RIGHT_UP);
+        clawServoLeft.goToPosition(CLAW_SERVO_LEFT_UP,.02);
+        clawServoRight.goToPosition(CLAW_SERVO_RIGHT_UP,.02);
 
 
 

@@ -30,15 +30,13 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
 
-/**
- * Autonomous Opmode G2
- */
+// Autonomous Opmode G2
 
-@Autonomous(name="Auto_Blue_Park_Block_Side", group="Wired")
-public class Auto_Blue_Park_Block_Side extends AutoLinearAbstract {
+
+@Autonomous(name="Auto_Blue_Block_Grab_Foundation_No_Park", group="Wired")
+public class Auto_Blue_Block_Grab_Foundation_No_Park extends AutoLinearAbstract {
 
     // Declare OpMode members specific to this Autonomous Opmode variant.
 
@@ -52,9 +50,11 @@ public class Auto_Blue_Park_Block_Side extends AutoLinearAbstract {
         // super.runOpMode finishes as soon as the Drive Station start/play button is pressed.
         super.runOpMode();
 
-        driveTrain.StrafeLeftToTarget(40,DRIVE_TRAIN_DEFAULT_SPEED);
+
+        // Go straight to become paralell with blocks
+        driveTrain.StrafeRightToTarget(26, DRIVE_TRAIN_DEFAULT_SPEED);
         while (!driveTrain.isMoveDone(MAX_DRIVE_TRAIN_POSITION_ERROR_INCHES)) {
-            telemetry.addLine("Wait - Strafing left to park area");
+            telemetry.addLine("Wait - Strafing right to foundation");
             driveTrainTelemetry();
             telemetry.update();
             if (Kill(28)) {
@@ -62,15 +62,35 @@ public class Auto_Blue_Park_Block_Side extends AutoLinearAbstract {
             }
         }
 
-        driveTrain.goStraightToTarget(24,DRIVE_TRAIN_DEFAULT_SPEED);
+
+        driveTrain.goStraightToTarget(-96, DRIVE_TRAIN_DEFAULT_SPEED);
         while (!driveTrain.isMoveDone(MAX_DRIVE_TRAIN_POSITION_ERROR_INCHES)) {
-            telemetry.addLine("Wait - Moving up out of the way");
+            telemetry.addLine("Wait - Moving forward to park");
             driveTrainTelemetry();
             telemetry.update();
             if (Kill(28)) {
                 break;
             }
         }
+
+        clawServoLeft.goToPosition(CLAW_SERVO_LEFT_DOWN,.02);
+        clawServoRight.goToPosition(CLAW_SERVO_RIGHT_DOWN,.02);
+
+        driveTrain.StrafeLeftToTarget(26, DRIVE_TRAIN_DEFAULT_SPEED);
+        while (!driveTrain.isMoveDone(MAX_DRIVE_TRAIN_POSITION_ERROR_INCHES)) {
+            telemetry.addLine("Wait - Strafing Left to build zone");
+            driveTrainTelemetry();
+            telemetry.update();
+            if (Kill(28)) {
+                break;
+            }
+        }
+
+
+        clawServoLeft.goToPosition(CLAW_SERVO_LEFT_UP,.02);
+        clawServoRight.goToPosition(CLAW_SERVO_RIGHT_UP,.02);
+
+
 
 
     }

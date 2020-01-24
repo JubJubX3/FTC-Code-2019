@@ -30,7 +30,6 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
 
 
@@ -38,7 +37,6 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
 
 @Autonomous(name="Auto_Red_Start_Foundation_Grab_Stone", group="Wired")
-@Disabled
 public class Auto_Red_Start_Foundation_Grab_Stone extends AutoLinearAbstract {
 
     // Declare OpMode members specific to this Autonomous Opmode variant.
@@ -52,22 +50,20 @@ public class Auto_Red_Start_Foundation_Grab_Stone extends AutoLinearAbstract {
 
         driveTrain.goStraightToTarget(26, DRIVE_TRAIN_DEFAULT_SPEED);
         while (!driveTrain.isMoveDone(MAX_DRIVE_TRAIN_POSITION_ERROR_INCHES)) {
-            telemetry.addLine("Wait - Driving forwards");
+            telemetry.addLine("Wait - Driving forward to align with blocks");
             driveTrainTelemetry();
             telemetry.update();
-            if (autoTimer.seconds() > 25) {
-                driveTrain.stop();
+            if (Kill(28)) {
                 break;
             }
         }
 
         driveTrain.StrafeLeftToTarget(80, DRIVE_TRAIN_DEFAULT_SPEED);
         while (!driveTrain.isMoveDone(MAX_DRIVE_TRAIN_POSITION_ERROR_INCHES)) {
-            telemetry.addLine("Wait - Strafing Right");
+            telemetry.addLine("Wait - Strafing Right to go to the blocks");
             driveTrainTelemetry();
             telemetry.update();
-            if (autoTimer.seconds() > 25) {
-                driveTrain.stop();
+            if (Kill(28)) {
                 break;
             }
 
@@ -78,77 +74,104 @@ public class Auto_Red_Start_Foundation_Grab_Stone extends AutoLinearAbstract {
             telemetry.addLine("Scissor Lift going down");
             motorTelemetryDegrees(scissorLift);
             telemetry.update();
-            if (autoTimer.seconds() > 28) {
-                scissorLift.stop();
+            if (Kill(28)) {
                 break;
             }
         }
 
         boxMover.goToAbsoluteDistance(BOX_MOVER_OUT, .7);
         while (!boxMover.isMoveDone(5)) {
-            telemetry.addLine("Wait - Moving Box Mover Out");
+            telemetry.addLine("Moving Box Mover Out");
             motorTelemetryDegrees(boxMover);
             telemetry.update();
-            if (autoTimer.seconds() > 28) {
-                boxMover.stop();
+            if (Kill(28)) {
                 break;
             }
         }
-
-
-        scissorTop.goToPositionNow(SCISSOR_TOP_DOWN);
-        scissorSides.goToPositionNow(SCISSOR_SIDES_IN);
 
 
         driveTrain.goStraightToTarget(4, DRIVE_TRAIN_DEFAULT_SPEED);
         while (!driveTrain.isMoveDone(5)) {
-            telemetry.addLine("Wait - Moving Forward");
+            telemetry.addLine("Moving Forward to the blocks");
             driveTrainTelemetry();
             telemetry.update();
-            if (autoTimer.seconds() > 28) {
-                driveTrain.stop();
+            if (Kill(28)) {
                 break;
             }
         }
 
-
-        scissorTop.goToPositionNow(SCISSOR_TOP_UP);
-        scissorSides.goToPositionNow(SCISSOR_SIDES_OUT);
-
-
-        driveTrain.goStraightToTarget(-4, DRIVE_TRAIN_DEFAULT_SPEED);
-        while (!driveTrain.isMoveDone(5)) {
-            telemetry.addLine("Wait - Moving Backwards");
-            driveTrainTelemetry();
-            telemetry.update();
-            if (autoTimer.seconds() > 28) {
-                driveTrain.stop();
-                break;
-            }
-        }
+        boxGrabber.goToPosition(BOX_GRABBER_CLOSED,.02);
 
 
         scissorLift.goToAbsoluteDistance(100, .5);
         while (!scissorLift.isMoveDone(5)) {
-            telemetry.addLine("Wait - Raising Arm");
+            telemetry.addLine("Raising scissor lift");
             motorTelemetryDegrees(scissorLift);
             telemetry.update();
-            if (autoTimer.seconds() > 28) {
-                driveTrain.stop();
+            if (Kill(28)) {
                 break;
             }
         }
 
 
-        driveTrain.StrafeRightToTarget(32, DRIVE_TRAIN_DEFAULT_SPEED);
+        driveTrain.goStraightToTarget(-4, DRIVE_TRAIN_DEFAULT_SPEED);
         while (!driveTrain.isMoveDone(5)) {
-            telemetry.addLine("Wait - Strafing Left");
+            telemetry.addLine("Moving Backwards away from blocks");
             driveTrainTelemetry();
             telemetry.update();
-            if (autoTimer.seconds() > 28) {
-                driveTrain.stop();
+            if (Kill(28)) {
                 break;
             }
         }
+
+
+
+
+
+        driveTrain.StrafeRightToTarget(80, DRIVE_TRAIN_DEFAULT_SPEED);
+        while (!driveTrain.isMoveDone(5)) {
+            telemetry.addLine("Strafing Left to foundation");
+            driveTrainTelemetry();
+            telemetry.update();
+            if (Kill(28)) {
+                break;
+            }
+        }
+
+        driveTrain.goStraightToTarget(4, DRIVE_TRAIN_DEFAULT_SPEED);
+        while (!driveTrain.isMoveDone(5)) {
+            telemetry.addLine("Moving Forward to the blocks");
+            driveTrainTelemetry();
+            telemetry.update();
+            if (Kill(28)) {
+                break;
+            }
+        }
+
+
+        scissorLift.goToAbsoluteDistance(0, .5);
+        while (!scissorLift.isMoveDone(5)) {
+            telemetry.addLine("Lowering scissor lift");
+            motorTelemetryDegrees(scissorLift);
+            telemetry.update();
+            if (Kill(28)) {
+                break;
+            }
+        }
+
+
+        boxGrabber.goToPosition(BOX_GRABBER_OPEN,.02);
+
+        driveTrain.goStraightToTarget(-4, DRIVE_TRAIN_DEFAULT_SPEED);
+        while (!driveTrain.isMoveDone(5)) {
+            telemetry.addLine("Moving Backwards away from blocks");
+            driveTrainTelemetry();
+            telemetry.update();
+            if (Kill(28)) {
+                break;
+            }
+        }
+
+
     }
 }

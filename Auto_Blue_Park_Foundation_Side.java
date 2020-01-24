@@ -30,14 +30,14 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
+
 
 
 /**
  * Autonomous Opmode G2
  */
 
-@Autonomous(name="Red_Auto_Basic_Park_Foundation_Side", group="Wired")
+@Autonomous(name="Auto_Blue_Park_Foundation_Side", group="Wired")
 public class Auto_Blue_Park_Foundation_Side extends AutoLinearAbstract {
 
     // Declare OpMode members specific to this Autonomous Opmode variant.
@@ -57,8 +57,7 @@ public class Auto_Blue_Park_Foundation_Side extends AutoLinearAbstract {
             telemetry.addLine("Wait - Strafing right to park area");
             driveTrainTelemetry();
             telemetry.update();
-            if (autoTimer.seconds() > 25) {
-                driveTrain.stop();
+            if (Kill(28)) {
                 break;
             }
         }
@@ -68,8 +67,7 @@ public class Auto_Blue_Park_Foundation_Side extends AutoLinearAbstract {
             telemetry.addLine("Wait - Moving up out of the way in the park area");
             driveTrainTelemetry();
             telemetry.update();
-            if (autoTimer.seconds() > 25) {
-                driveTrain.stop();
+            if (Kill(28)) {
                 break;
             }
         }

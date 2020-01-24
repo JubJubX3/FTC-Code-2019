@@ -63,7 +63,7 @@ import static org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocaliz
  *                   - Added servoRelicLinear and initialization logic*/
 
 //@Disabled
-public abstract class AutoLinearAbstractVU extends LinearOpMode {
+public abstract class AutoLinearAbstractVU2 extends LinearOpMode {
 
     /* =======================================================
      * CLASS MEMBERS (i.e., Class Status)
@@ -87,6 +87,7 @@ public abstract class AutoLinearAbstractVU extends LinearOpMode {
             boxGrabber,
             clawServoLeft,
             clawServoRight;
+
 
 
     ElapsedTime
@@ -118,11 +119,11 @@ public abstract class AutoLinearAbstractVU extends LinearOpMode {
     final static double
             MAX_DRIVE_TRAIN_POSITION_ERROR_INCHES = 0.25,
 
-    DRIVE_TRAIN_PIVOT_SPEED = 0.2,
+            DRIVE_TRAIN_PIVOT_SPEED = 0.2,
             DRIVE_TRAIN_DEFAULT_SPEED = 0.5,
             DRIVE_TRAIN_STRAIGHT_SPEED = 0.6,
 
-    BOX_GRABBER_CLOSED = 0.3,
+            BOX_GRABBER_CLOSED = 0.3,
             BOX_GRABBER_OPEN = 0.6,
             BOX_MOVER_OUT = 3000,
             BOX_MOVER_IN = 0,
@@ -138,9 +139,12 @@ public abstract class AutoLinearAbstractVU extends LinearOpMode {
             REVERSE = true;
 
 
+
+
+
     // IMPORTANT: If you are using a USB WebCam, you must select CAMERA_CHOICE = BACK; and PHONE_IS_PORTRAIT = false;
     private static final VuforiaLocalizer.CameraDirection CAMERA_CHOICE = BACK;
-    private static final boolean PHONE_IS_PORTRAIT = false;
+    private static final boolean PHONE_IS_PORTRAIT = false  ;
 
     /*
      * IMPORTANT: You need to obtain your own license key to use Vuforia. The string below with which
@@ -155,12 +159,12 @@ public abstract class AutoLinearAbstractVU extends LinearOpMode {
      * and paste it in to your code on the next line, between the double quotes.
      */
     private static final String VUFORIA_KEY =
-            " AeeN/3r/////AAABmf1me9Nb2Ej/q0VZKiFuQ/EiiMAn/BJDOd5n6hfxmP6/m7RdZX0DhKBijOtTZ9MtmLZDxr2s0/kjmIu/3n95SpT3t1p4qoZXEUyutIhiI5ZrqBw7yo33KDHtmzQ69S80OwSbyg2dlSnjX8wvA4JUVda/Xuxx2MtbaIdYKhSEhZr3hq0DOb4MGo9NAITEZac/5PkfYGm4QuPxtz7wFsTtnZO0AoR6nmBgJx2W7iUzYYv4FuWuthZLTl5T//LkCNhznDzU8DEZP3amALFY2f0h4MwpCmGqRCEtfUc3SRzmdMbWhX1Hm7fEraahAhGchdivrhnq2bNMw2PPYm2YTVCoSNFR0vFRE3YmKihMLWiio6Zu ";
+            " --- YOUR NEW VUFORIA KEY GOES HERE  --- ";
 
     // Since ImageTarget trackables use mm to specifiy their dimensions, we must use mm for all the physical dimension.
     // We will define some constants and conversions here
-    private static final float mmPerInch = 25.4f;
-    private static final float mmTargetHeight = (6) * mmPerInch;          // the height of the center of the target image above the floor
+    private static final float mmPerInch        = 25.4f;
+    private static final float mmTargetHeight   = (6) * mmPerInch;          // the height of the center of the target image above the floor
 
     // Constant for Stone Target
     private static final float stoneZ = 2.00f * mmPerInch;
@@ -174,7 +178,7 @@ public abstract class AutoLinearAbstractVU extends LinearOpMode {
 
     // Constants for perimeter targets
     private static final float halfField = 72 * mmPerInch;
-    private static final float quadField = 36 * mmPerInch;
+    private static final float quadField  = 36 * mmPerInch;
 
     // Class Members
     private OpenGLMatrix lastLocation = null;
@@ -184,12 +188,12 @@ public abstract class AutoLinearAbstractVU extends LinearOpMode {
      * This is the webcam we are to use. As with other hardware devices such as motors and
      * servos, this device is identified using the robot configuration tool in the FTC application.
      */
-    // WebcamName webcamName = null;
+    WebcamName webcamName = null;
 
     private boolean targetVisible = false;
-    private float phoneXRotate = 0;
-    private float phoneYRotate = 0;
-    private float phoneZRotate = 0;
+    private float phoneXRotate    = 0;
+    private float phoneYRotate    = 0;
+    private float phoneZRotate    = 0;
 
     /* =======================================================
      * CLASS METHODS (i.e., Class Behavior)
@@ -208,6 +212,14 @@ public abstract class AutoLinearAbstractVU extends LinearOpMode {
 
         /* Drive Train constructor: hardwareMap, left motor name, left motor direction, right motor name, right motor direction,
                                     encoder counts per output shaft revolution, gear ratio, wheel radius */
+        driveTrain = new mecanumDrive(hardwareMap,"front_left_drive",REVERSE,"front_right_drive",FORWARD,"rear_left_drive",REVERSE,"rear_right_drive",FORWARD,1120,1.0,2.0);
+
+        /* Target-Motor constructor: hardwareMap, motor name, motor direction,
+                              encoder counts per output shaft revolution, gear ratio, wheel radius */
+        scissorLift = new DeviceTargetMotor(hardwareMap,"scissor_lift",REVERSE,1680,1);
+
+        boxMover = new DeviceTargetMotor(hardwareMap,"box_mover",REVERSE,1440);
+
 
 
         /* Color sensor constructor: hardwareMap, sensor name, sensor I2C address */
@@ -215,9 +227,9 @@ public abstract class AutoLinearAbstractVU extends LinearOpMode {
         //   colorRightJewel = new DeviceColorSensor(hardwareMap,"right_jewel_color",0x30);
 
         /* Target-Servo constructor: hardwareMap, servo name, initial servo position */
-        boxGrabber = new DeviceTargetServo(hardwareMap, "box_grabber", BOX_GRABBER_OPEN);
+        boxGrabber = new DeviceTargetServo(hardwareMap,"box_grabber",BOX_GRABBER_OPEN);
         clawServoLeft = new DeviceTargetServo(hardwareMap, "claw_servo_left", CLAW_SERVO_LEFT_UP);
-        clawServoRight = new DeviceTargetServo(hardwareMap, "claw_servo_right", CLAW_SERVO_RIGHT_UP);
+        clawServoRight = new DeviceTargetServo(hardwareMap, "claw_servo_right",CLAW_SERVO_RIGHT_UP);
         /* INITIALIZE ROBOT - INITIALIZE ROBOT OBJECTS AND CLASSES*/
 
 
@@ -233,8 +245,8 @@ public abstract class AutoLinearAbstractVU extends LinearOpMode {
         boxMover.resetEncoder();
 
         /* Lock drive train at current position */
-        driveTrain.front.motorLeft.goToAbsoluteDistance(driveTrain.front.motorLeft.getPosition(), DRIVE_TRAIN_DEFAULT_SPEED);
-        driveTrain.front.motorRight.goToAbsoluteDistance(driveTrain.front.motorRight.getPosition(), DRIVE_TRAIN_DEFAULT_SPEED);
+        driveTrain.front.motorLeft.goToAbsoluteDistance(driveTrain.front.motorLeft.getPosition(),DRIVE_TRAIN_DEFAULT_SPEED);
+        driveTrain.front.motorRight.goToAbsoluteDistance(driveTrain.front.motorRight.getPosition(),DRIVE_TRAIN_DEFAULT_SPEED);
         driveTrain.rear.motorLeft.goToAbsoluteDistance(driveTrain.rear.motorLeft.getPosition(), DRIVE_TRAIN_DEFAULT_SPEED);
         driveTrain.rear.motorRight.goToAbsoluteDistance(driveTrain.rear.motorRight.getPosition(), DRIVE_TRAIN_DEFAULT_SPEED);
 
@@ -246,7 +258,7 @@ public abstract class AutoLinearAbstractVU extends LinearOpMode {
         /*
          * Retrieve the camera we are to use.
          */
-        //webcamName = hardwareMap.get(WebcamName.class, "Webcam 1");
+        webcamName = hardwareMap.get(WebcamName.class, "Webcam 1");
 
         /*
          * Configure Vuforia by creating a Parameter object, and passing it to the Vuforia engine.
@@ -263,7 +275,7 @@ public abstract class AutoLinearAbstractVU extends LinearOpMode {
         /**
          * We also indicate which camera on the RC we wish to use.
          */
-        //parameters.cameraName = webcamName;
+        parameters.cameraName = webcamName;
 
         //  Instantiate the Vuforia engine
         vuforia = ClassFactory.getInstance().createVuforia(parameters);
@@ -357,7 +369,7 @@ public abstract class AutoLinearAbstractVU extends LinearOpMode {
 
         front1.setLocation(OpenGLMatrix
                 .translation(-halfField, -quadField, mmTargetHeight)
-                .multiplied(Orientation.getRotationMatrix(EXTRINSIC, XYZ, DEGREES, 90, 0, 90)));
+                .multiplied(Orientation.getRotationMatrix(EXTRINSIC, XYZ, DEGREES, 90, 0 , 90)));
 
         front2.setLocation(OpenGLMatrix
                 .translation(-halfField, quadField, mmTargetHeight)
@@ -373,7 +385,7 @@ public abstract class AutoLinearAbstractVU extends LinearOpMode {
 
         rear1.setLocation(OpenGLMatrix
                 .translation(halfField, quadField, mmTargetHeight)
-                .multiplied(Orientation.getRotationMatrix(EXTRINSIC, XYZ, DEGREES, 90, 0, -90)));
+                .multiplied(Orientation.getRotationMatrix(EXTRINSIC, XYZ, DEGREES, 90, 0 , -90)));
 
         rear2.setLocation(OpenGLMatrix
                 .translation(halfField, -quadField, mmTargetHeight)
@@ -402,14 +414,14 @@ public abstract class AutoLinearAbstractVU extends LinearOpMode {
 
         // Rotate the phone vertical about the X axis if it's in portrait mode
         if (PHONE_IS_PORTRAIT) {
-            phoneXRotate = 90;
+            phoneXRotate = 90 ;
         }
 
         // Next, translate the camera lens to where it is on the robot.
         // In this example, it is centered (left to right), but forward of the middle of the robot, and above ground level.
-        final float CAMERA_FORWARD_DISPLACEMENT = 4.0f * mmPerInch;   // eg: Camera is 4 Inches in front of robot-center
+        final float CAMERA_FORWARD_DISPLACEMENT  = 4.0f * mmPerInch;   // eg: Camera is 4 Inches in front of robot-center
         final float CAMERA_VERTICAL_DISPLACEMENT = 8.0f * mmPerInch;   // eg: Camera is 8 Inches above ground
-        final float CAMERA_LEFT_DISPLACEMENT = 0;     // eg: Camera is ON the robot's center line
+        final float CAMERA_LEFT_DISPLACEMENT     = 0;     // eg: Camera is ON the robot's center line
 
         OpenGLMatrix robotFromCamera = OpenGLMatrix
                 .translation(CAMERA_FORWARD_DISPLACEMENT, CAMERA_LEFT_DISPLACEMENT, CAMERA_VERTICAL_DISPLACEMENT)
@@ -433,25 +445,26 @@ public abstract class AutoLinearAbstractVU extends LinearOpMode {
         autoTimer.reset();  // Reset/restart the autotimer
 
 
+
         // GAME STARTED - BEGIN AUTONOMOUS OPERATIONS
 
     }
 
-    public int RobotEyes(List<VuforiaTrackable> patterns) {
-        int indexTarget;
-        indexTarget = 0;
+    public int RobotEyes (List<VuforiaTrackable> patterns) {
+        int indexTarget ;
+        indexTarget=0;
         targetVisible = false;
 
         for (VuforiaTrackable trackable : patterns) {
-            indexTarget = indexTarget + 1;
-            if (((VuforiaTrackableDefaultListener) trackable.getListener()).isVisible()) {
+            indexTarget = indexTarget +1;
+            if (((VuforiaTrackableDefaultListener)trackable.getListener()).isVisible()) {
                 telemetry.addData("Visible Target", trackable.getName());
 
                 targetVisible = true;
 
                 // getUpdatedRobotLocation() will return null if no new information is available since
                 // the last time that call was made, or if the trackable is not currently visible.
-                OpenGLMatrix robotLocationTransform = ((VuforiaTrackableDefaultListener) trackable.getListener()).getUpdatedRobotLocation();
+                OpenGLMatrix robotLocationTransform = ((VuforiaTrackableDefaultListener)trackable.getListener()).getUpdatedRobotLocation();
                 if (robotLocationTransform != null) {
                     lastLocation = robotLocationTransform;
                 }
@@ -466,9 +479,9 @@ public abstract class AutoLinearAbstractVU extends LinearOpMode {
             telemetry.addData("Pos (in)", "{X, Y, Z} = %.1f, %.1f, %.1f",
                     translation.get(0) / mmPerInch, translation.get(1) / mmPerInch, translation.get(2) / mmPerInch);
 
-            XPosition = translation.get(0) / mmPerInch;
-            YPosition = translation.get(1) / mmPerInch;
-            ZPosition = translation.get(2) / mmPerInch;
+            XPosition = translation.get(0)/mmPerInch;
+            YPosition = translation.get(1)/mmPerInch;
+            ZPosition = translation.get(2)/mmPerInch;
 
             // express the rotation of the robot in degrees.
 
@@ -479,15 +492,18 @@ public abstract class AutoLinearAbstractVU extends LinearOpMode {
             heading = rotation.thirdAngle;
 
             telemetry.addData("Rot (deg)", "{Roll, Pitch, Heading} = %.0f, %.0f, %.0f", rotation.firstAngle, rotation.secondAngle, rotation.thirdAngle);
-        } else {
+        }
+
+
+        else {
             telemetry.addData("Visible Target", "none");
 
         }
 
-        if (!targetVisible)
+        if(!targetVisible)
             indexTarget = 0;
 
-        telemetry.addData("index", " = ", indexTarget);
+        telemetry.addData("index"," = ", indexTarget);
         telemetry.update();
 
         return indexTarget;
@@ -498,63 +514,67 @@ public abstract class AutoLinearAbstractVU extends LinearOpMode {
      * Method: driveTrainTelemetry
      * Purpose: Report the position and speed of the drive train wheels
      * ------------------------------------------------------- */
-    void driveTrainTelemetry() {
+    void driveTrainTelemetry () {
         telemetry.addLine("Left Drive Front Motor");
-        telemetry.addData("  Position in EngUnits", "%.2f", driveTrain.front.motorLeft.getPosition());
-        telemetry.addData("  Target in EngUnits", "%.2f", driveTrain.front.motorLeft.targetPosition);
-        telemetry.addData("  Position in Counts", driveTrain.front.motorLeft.targetMotor.getCurrentPosition());
-        telemetry.addData("  Target in Counts", driveTrain.front.motorLeft.targetCount);
-        telemetry.addData("  Is Busy", driveTrain.front.motorLeft.targetMotor.isBusy());
-        telemetry.addData("  Speed", driveTrain.front.leftSpeed);
+        telemetry.addData("  Position in EngUnits","%.2f", driveTrain.front.motorLeft.getPosition());
+        telemetry.addData("  Target in EngUnits","%.2f", driveTrain.front.motorLeft.targetPosition);
+        telemetry.addData("  Position in Counts",driveTrain.front.motorLeft.targetMotor.getCurrentPosition());
+        telemetry.addData("  Target in Counts",driveTrain.front.motorLeft.targetCount);
+        telemetry.addData("  Is Busy",driveTrain.front.motorLeft.targetMotor.isBusy());
+        telemetry.addData("  Speed",driveTrain.front.leftSpeed);
 
 
         telemetry.addLine("Left Drive Rear Motor");
-        telemetry.addData("  Position in EngUnits", "%.2f", driveTrain.rear.motorLeft.getPosition());
-        telemetry.addData("  Target in EngUnits", "%.2f", driveTrain.rear.motorLeft.targetPosition);
-        telemetry.addData("  Position in Counts", driveTrain.rear.motorLeft.targetMotor.getCurrentPosition());
-        telemetry.addData("  Target in Counts", driveTrain.rear.motorLeft.targetCount);
-        telemetry.addData("  Is Busy", driveTrain.rear.motorLeft.targetMotor.isBusy());
-        telemetry.addData("  Speed", driveTrain.rear.leftSpeed);
+        telemetry.addData("  Position in EngUnits","%.2f", driveTrain.rear.motorLeft.getPosition());
+        telemetry.addData("  Target in EngUnits","%.2f", driveTrain.rear.motorLeft.targetPosition);
+        telemetry.addData("  Position in Counts",driveTrain.rear.motorLeft.targetMotor.getCurrentPosition());
+        telemetry.addData("  Target in Counts",driveTrain.rear.motorLeft.targetCount);
+        telemetry.addData("  Is Busy",driveTrain.rear.motorLeft.targetMotor.isBusy());
+        telemetry.addData("  Speed",driveTrain.rear.leftSpeed);
 
         telemetry.addLine("Right Drive Front Motor");
-        telemetry.addData("  Position in EngUnits", "%.2f", driveTrain.front.motorRight.getPosition());
-        telemetry.addData("  Target in EngUnits", "%.2f", driveTrain.front.motorRight.targetPosition);
-        telemetry.addData("  Position in Counts", driveTrain.front.motorRight.targetMotor.getCurrentPosition());
-        telemetry.addData("  Target in Counts", driveTrain.front.motorRight.targetCount);
-        telemetry.addData("  Is Busy", driveTrain.front.motorRight.targetMotor.isBusy());
-        telemetry.addData("  Speed", driveTrain.front.rightSpeed);
+        telemetry.addData("  Position in EngUnits","%.2f", driveTrain.front.motorRight.getPosition());
+        telemetry.addData("  Target in EngUnits","%.2f", driveTrain.front.motorRight.targetPosition);
+        telemetry.addData("  Position in Counts",driveTrain.front.motorRight.targetMotor.getCurrentPosition());
+        telemetry.addData("  Target in Counts",driveTrain.front.motorRight.targetCount);
+        telemetry.addData("  Is Busy",driveTrain.front.motorRight.targetMotor.isBusy());
+        telemetry.addData("  Speed",driveTrain.front. rightSpeed);
 
         telemetry.addLine("Right Drive Rear Motor");
-        telemetry.addData("  Position in EngUnits", "%.2f", driveTrain.rear.motorRight.getPosition());
-        telemetry.addData("  Target in EngUnits", "%.2f", driveTrain.rear.motorRight.targetPosition);
-        telemetry.addData("  Position in Counts", driveTrain.rear.motorRight.targetMotor.getCurrentPosition());
-        telemetry.addData("  Target in Counts", driveTrain.rear.motorRight.targetCount);
-        telemetry.addData("  Is Busy", driveTrain.rear.motorRight.targetMotor.isBusy());
-        telemetry.addData("  Speed", driveTrain.rear.rightSpeed);
+        telemetry.addData("  Position in EngUnits","%.2f", driveTrain.rear.motorRight.getPosition());
+        telemetry.addData("  Target in EngUnits","%.2f", driveTrain.rear.motorRight.targetPosition);
+        telemetry.addData("  Position in Counts",driveTrain.rear.motorRight.targetMotor.getCurrentPosition());
+        telemetry.addData("  Target in Counts",driveTrain.rear.motorRight.targetCount);
+        telemetry.addData("  Is Busy",driveTrain.rear.motorRight.targetMotor.isBusy());
+        telemetry.addData("  Speed",driveTrain.rear. rightSpeed);
     }
 
 
-    void motorTelemetryDegrees(DeviceTargetMotor motor) {
+
+    void motorTelemetryDegrees (DeviceTargetMotor motor) {
         telemetry.addLine();
         telemetry.addLine(motor.name);
         telemetry.addData(" Position in Degrees", "%.2f degrees ", motor.getDegrees());
         telemetry.addData(" Position in Counts", motor.targetMotor.getCurrentPosition());
-    }
+}
 
-    boolean Kill(double autoTime) {
+    boolean Kill ( double autoTime) {
         boolean eStop;
-        if (!opModeIsActive() || autoTimer.seconds() >= autoTime) {
+        if(!opModeIsActive() || autoTimer.seconds()>= autoTime) {
 
             driveTrain.stop();
             scissorLift.stop();
 
             eStop = true;
 
-        } else
+        }
+        else
             eStop = false;
 
         return eStop;
 
 
+
     }
+
 }

@@ -59,8 +59,7 @@ public class Auto_Blue_Skystone_Side extends AutoLinearAbstract {
             telemetry.addLine("Wait - Move to align with blocks");
             driveTrainTelemetry();
             telemetry.update();
-            if (autoTimer.seconds() > 25) {
-                driveTrain.stop();
+            if (Kill(28)) {
                 break;
             }
         }
@@ -70,8 +69,7 @@ public class Auto_Blue_Skystone_Side extends AutoLinearAbstract {
             telemetry.addLine("Wait - Strafing right to blocks");
             driveTrainTelemetry();
             telemetry.update();
-            if (autoTimer.seconds() > 25) {
-                driveTrain.stop();
+            if (Kill(28)) {
                 break;
             }
         }
@@ -86,8 +84,7 @@ public class Auto_Blue_Skystone_Side extends AutoLinearAbstract {
             telemetry.addLine("Wait - Moving up next to the blocks");
             driveTrainTelemetry();
             telemetry.update();
-            if (autoTimer.seconds() > 25) {
-                driveTrain.stop();
+            if (Kill(28)) {
                 break;
             }
         }
@@ -97,8 +94,7 @@ public class Auto_Blue_Skystone_Side extends AutoLinearAbstract {
             telemetry.addLine("Scissor Lift going down");
             motorTelemetryDegrees(scissorLift);
             telemetry.update();
-            if (autoTimer.seconds() > 28) {
-                scissorLift.stop();
+            if (Kill(28)) {
                 break;
             }
         }
@@ -108,16 +104,14 @@ public class Auto_Blue_Skystone_Side extends AutoLinearAbstract {
             telemetry.addLine("Box mover going out");
             motorTelemetryDegrees(boxMover);
             telemetry.update();
-            if (autoTimer.seconds() > 28) {
-                boxMover.stop();
+            if (Kill(28)) {
                 break;
             }
         }
 
 
 
-        scissorSides.goToPositionNow(SCISSOR_SIDES_IN);
-        scissorTop.goToPositionNow(SCISSOR_TOP_DOWN);
+        boxGrabber.goToPosition(BOX_GRABBER_CLOSED,.02);
 
         //Box mover in position
         //Go back wards with direction that the skystone was
@@ -127,8 +121,7 @@ public class Auto_Blue_Skystone_Side extends AutoLinearAbstract {
             telemetry.addLine("Wait - Moving backwards out of the way");
             driveTrainTelemetry();
             telemetry.update();
-            if (autoTimer.seconds() > 25) {
-                driveTrain.stop();
+            if (Kill(28)) {
                 break;
             }
         }
@@ -138,8 +131,7 @@ public class Auto_Blue_Skystone_Side extends AutoLinearAbstract {
             telemetry.addLine("Wait - Strafing left to foundation");
             driveTrainTelemetry();
             telemetry.update();
-            if (autoTimer.seconds() > 25) {
-                driveTrain.stop();
+            if (Kill(28)) {
                 break;
             }
         }
@@ -149,15 +141,23 @@ public class Auto_Blue_Skystone_Side extends AutoLinearAbstract {
             telemetry.addLine("Wait - Moving up to the foundation");
             driveTrainTelemetry();
             telemetry.update();
-            if (autoTimer.seconds() > 25) {
-                driveTrain.stop();
+            if (Kill(28)) {
                 break;
             }
         }
 
 
-        scissorTop.goToPositionNow(SCISSOR_TOP_UP);
-        scissorSides.goToPositionNow(SCISSOR_SIDES_OUT);
+        boxGrabber.goToPosition(BOX_GRABBER_OPEN,.02);
+
+        driveTrain.goStraightToTarget(-4, DRIVE_TRAIN_DEFAULT_SPEED);
+        while (!driveTrain.isMoveDone(MAX_DRIVE_TRAIN_POSITION_ERROR_INCHES)) {
+            telemetry.addLine("Wait - Moving backwards out of the way");
+            driveTrainTelemetry();
+            telemetry.update();
+            if (Kill(28)) {
+                break;
+            }
+        }
 
 
 

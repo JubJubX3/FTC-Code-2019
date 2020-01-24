@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
@@ -12,8 +13,7 @@ public class HwGM {
 
     /* Our Public OpMode Devices */
     Servo
-            scissorTop =null,
-            scissorSides =null,
+            boxGrabber = null,
             clawServoLeft = null,
             clawServoRight = null;
 
@@ -26,22 +26,30 @@ public class HwGM {
             scissorLift = null;
 
     final int
-            BOX_MOVER_OUT = 4000,
+
+            BOX_MOVER_OUT = 3500,
             BOX_MOVER_IN = 0,
             SCISSOR_DOWN_POS = 0,
-            SCISSOR_UP_POS = 9475;
+            SCISSOR_UP_POS = 12500,
+            SCISSOR_SAFE_POS = 2500;
+
     final double
-            SCISSOR_TOP_UP = 0.8,
-            SCISSOR_TOP_DOWN = 0,
-            SCISSOR_SIDES_OUT = 0,
-            SCISSOR_SIDES_IN = 0.8,
-            SCISSOR_MOTOR_SPEED_FACTOR = 0.95,
-            BOX_MOTOR_SPEED_FACTOR = 0.3,
+            BOX_GRABBER_CLOSED = 0.45,
+            BOX_GRABBER_OPEN = 0.6,
+            SCISSOR_MOTOR_SPEED_FACTOR = 1,
+            SCISSOR_MOTOR_INC = 1800,
+            SCISSOR_CURRENT_POS = 0,
+            BOX_MOTOR_SPEED_FACTOR = 0.6,
+            SCISSOR_SAFE_SPEED_FACTOR = .25,
+            BOX_MOVER_SAFE_SPEED_FACTOR = .25,
             NULL_MOTOR_MOVE_SPEED = 0.1,
             CLAW_SERVO_LEFT_UP = 0.65,
             CLAW_SERVO_LEFT_DOWN = 0.05,
             CLAW_SERVO_RIGHT_UP = 0.05,
             CLAW_SERVO_RIGHT_DOWN = 0.65;
+
+    int scissorposition[]={0,743,3600,7200,10800,14400,18000};
+    int indexLift;
 
     /* The OpMode Constants */
 
@@ -68,11 +76,8 @@ public class HwGM {
 
         scissorLift = hwMap.dcMotor.get("scissor_lift");
 
-        scissorTop = hwMap.servo.get("scissor_top");
-        scissorTop.setPosition(SCISSOR_TOP_UP);
-
-        scissorSides = hwMap.servo.get("scissor_sides");
-        scissorSides.setPosition(SCISSOR_SIDES_OUT);
+        boxGrabber = hwMap.servo.get("box_grabber");
+        boxGrabber.setPosition(BOX_GRABBER_OPEN);
 
         clawServoLeft = hwMap.servo.get("claw_servo_left");
         clawServoLeft.setPosition(CLAW_SERVO_LEFT_UP);
@@ -82,17 +87,17 @@ public class HwGM {
 
         boxMover = hwMap.dcMotor.get("box_mover");
 
-        frontLeftDrive.setDirection(DcMotor.Direction.FORWARD);
-        frontRightDrive.setDirection(DcMotor.Direction.REVERSE);
+        frontLeftDrive.setDirection(DcMotor.Direction.REVERSE);
+        frontRightDrive.setDirection(DcMotor.Direction.FORWARD);
 
-        rearLeftDrive.setDirection(DcMotor.Direction.FORWARD);
-        rearRightDrive.setDirection(DcMotor.Direction.REVERSE);
+        rearLeftDrive.setDirection(DcMotor.Direction.REVERSE);
+        rearRightDrive.setDirection(DcMotor.Direction.FORWARD);
 
 
         scissorLift.setDirection(DcMotor.Direction.FORWARD);
         scissorLift.setTargetPosition(SCISSOR_DOWN_POS);
 
-        boxMover.setDirection(DcMotor.Direction.FORWARD);
+        boxMover.setDirection(DcMotor.Direction.REVERSE);
         boxMover.setTargetPosition(BOX_MOVER_IN);
 
 
@@ -102,6 +107,11 @@ public class HwGM {
         rearRightDrive.setPower(0);
         scissorLift.setPower(0);
 
+
+        frontRightDrive.setTargetPosition(0);
+        frontLeftDrive.setTargetPosition(0);
+        rearRightDrive.setTargetPosition(0);
+        rearLeftDrive.setTargetPosition(0);
 
         //Resetting encoder numbers to zero
         frontLeftDrive.setMode(DcMotor.RunMode.RESET_ENCODERS);
